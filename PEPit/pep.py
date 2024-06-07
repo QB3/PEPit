@@ -282,7 +282,7 @@ class PEP(object):
         self.list_of_performance_metrics.append(expression)
 
     def solve(self, wrapper="cvxpy", return_primal_or_dual="dual", verbose=1,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4, **kwargs):
+              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4, custom_constraints=None, **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
         instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
@@ -353,11 +353,13 @@ class PEP(object):
         # Call the internal solve methods, which formulates and solves the PEP via the SDP solver.
         out = self._solve_with_wrapper(wrapper, verbose, return_primal_or_dual,
                                        dimension_reduction_heuristic,
-                                       eig_regularization, tol_dimension_reduction, **kwargs)
+                                       eig_regularization, tol_dimension_reduction,
+                                       custom_constraints=custom_constraints, **kwargs)
         return out
 
     def _solve_with_wrapper(self, wrapper, verbose=1, return_primal_or_dual="dual",
                             dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4,
+                            custom_constraints=None,
                             **kwargs):
         """
         Internal solve method. Translate the :class:`PEP` to an SDP, and solve it via the wrapper.
@@ -404,13 +406,13 @@ class PEP(object):
         self.objective = Expression(is_leaf=True)
 
         # Store functions that have class constraints as well as functions that have personal constraints
-        list_of_leaf_functions = [function for function in Function.list_of_functions
-                                  if function.get_is_leaf()]
-        list_of_functions_with_constraints = [function for function in Function.list_of_functions
+        self.list_of_leaf_functions = [function for function in Function.list_of_functions
+                                if function.get_is_leaf()]
+        self.list_of_functions_with_constraints = [function for function in Function.list_of_functions
                                               if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
 
         # Create all class constraints
-        for function in list_of_leaf_functions:
+        for function in self.list_of_leaf_functions:
             function.set_class_constraints()
 
         # Create all partition constraints
@@ -463,15 +465,21 @@ class PEP(object):
         # Defining class constraints
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' interpolation conditions for {} function(s)'.format(len(list_of_leaf_functions)))
+                  ' interpolation conditions for {} function(s)'.format(len(self.list_of_leaf_functions)))
         function_counter = 0
-        for function in list_of_leaf_functions:
+        for function in self.list_of_leaf_functions:
             function_counter += 1
 
             if verbose:
                 print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
                       'scalar constraint(s) ...')
 
+            print(
+                "(PEPit) Size func class constraint :%i" % len(function.list_of_class_constraints))
+
+            if custom_constraints is not None:
+                function.list_of_class_constraints = custom_constraints
+            #  =
             for constraint in function.list_of_class_constraints:
                 wrapper.send_constraint_to_solver(constraint)
                 self._list_of_constraints_sent_to_wrapper.append(constraint)
@@ -496,9 +504,9 @@ class PEP(object):
         # Other function constraints
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' additional constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
+                  ' additional constraints for {} function(s)'.format(len(self.list_of_functions_with_constraints)))
         function_counter = 0
-        for function in list_of_functions_with_constraints:
+        for function in self.list_of_functions_with_constraints:
             function_counter += 1
 
             if len(function.list_of_constraints) > 0:
@@ -532,6 +540,7 @@ class PEP(object):
             print(
                 '(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
 
+
         partition_counter = 0
         for partition in BlockPartition.list_of_partitions:
             partition_counter += 1
@@ -545,9 +554,12 @@ class PEP(object):
                 print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
 
+
         # Instantiate the problem
         if verbose:
             print('(PEPit) Compiling SDP')
+
+
         wrapper.generate_problem(self.objective)
 
         # Solve it
@@ -559,6 +571,10 @@ class PEP(object):
                                                                                                  self.wrapper_name,
                                                                                                  solver_name,
                                                                                                  wc_value))
+
+
+        # if custom_constraints is not None:
+        #     self._list_of_constraints_sent_to_wrapper = custom_constraints
 
         # Raise explicit error when wc_value in infinite
         if wc_value is None:
