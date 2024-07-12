@@ -1,6 +1,9 @@
 import numpy as np
 from PEPit.function import Function
 
+import sympy
+from sympy import symbols
+
 
 class LipschitzStronglyMonotoneOperator(Function):
     """
@@ -71,6 +74,8 @@ class LipschitzStronglyMonotoneOperator(Function):
         # Store L and mu
         self.mu = mu
         self.L = L
+        self.mu_sympy = symbols("mu", positive=True)
+        self.L_sympy = symbols("L", positive=True)
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of Lipschitz strongly monotone operators is necessarily continuous.\n"
@@ -104,6 +109,22 @@ class LipschitzStronglyMonotoneOperator(Function):
 
         return constraint
 
+    def set_sympy_expr_strong_monotonicity(self, x1, x2, g1, g2):
+        """
+        Return the sympy expression
+        """
+        sympy_expr = self.mu_sympy * (x1 - x2) ** 2 - (g1 - g2) * (x1 - x2)
+        return sympy_expr
+
+
+    def set_sympy_expr_lipschitzness(self, x1, x2, g1, g2):
+        """
+        Return the sympy expression
+        """
+        sympy_expr = (g1 - g2) ** 2 - self.L_sympy **2 * (x1 - x2) ** 2
+        return sympy_expr
+
+
     def add_class_constraints(self):
         """
         Formulates the list of necessary conditions for interpolation of self (Lipschitz strongly monotone and
@@ -116,6 +137,7 @@ class LipschitzStronglyMonotoneOperator(Function):
                                                       set_class_constraint_i_j=
                                                       self.set_strong_monotonicity_constraint_i_j,
                                                       symmetry=True,
+                                                      set_sympy_expr=self.set_sympy_expr_strong_monotonicity
                                                       )
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
@@ -124,4 +146,5 @@ class LipschitzStronglyMonotoneOperator(Function):
                                                       set_class_constraint_i_j=
                                                       self.set_lipschitz_continuity_constraint_i_j,
                                                       symmetry=True,
+                                                      set_sympy_expr=self.set_sympy_expr_lipschitzness
                                                       )

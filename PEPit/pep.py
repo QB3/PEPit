@@ -411,6 +411,8 @@ class PEP(object):
         self.list_of_functions_with_constraints = [function for function in Function.list_of_functions
                                               if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
 
+
+
         # Create all class constraints
         for function in self.list_of_leaf_functions:
             function.set_class_constraints()
@@ -467,7 +469,7 @@ class PEP(object):
             print('(PEPit) Setting up the problem:'
                   ' interpolation conditions for {} function(s)'.format(len(self.list_of_leaf_functions)))
         function_counter = 0
-        for function in self.list_of_leaf_functions:
+        for idx_function, function in enumerate(self.list_of_leaf_functions):
             function_counter += 1
 
             if verbose:
@@ -477,8 +479,11 @@ class PEP(object):
             print(
                 "(PEPit) Size func class constraint :%i" % len(function.list_of_class_constraints))
 
+            # TODO change to take potential multiple functions into account
             if custom_constraints is not None:
-                function.list_of_class_constraints = custom_constraints
+                # if custom_constraints[idx_function] is not None:
+                function.list_of_class_constraints = custom_constraints[idx_function]
+            # else:
             #  =
             for constraint in function.list_of_class_constraints:
                 wrapper.send_constraint_to_solver(constraint)
@@ -561,6 +566,7 @@ class PEP(object):
 
 
         wrapper.generate_problem(self.objective)
+        # import ipdb; ipdb.set_trace()
 
         # Solve it
         if verbose:

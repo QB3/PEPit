@@ -1,4 +1,6 @@
 from PEPit.function import Function
+import sympy
+from sympy import symbols
 
 
 class StronglyMonotoneOperator(Function):
@@ -59,6 +61,8 @@ class StronglyMonotoneOperator(Function):
                          )
         # Store mu
         self.mu = mu
+        mu_sympy = symbols("mu", positive=True)
+
 
     def set_strong_monotonicity_constraint_i_j(self,
                                                xi, gi, fi,
@@ -85,4 +89,11 @@ class StronglyMonotoneOperator(Function):
                                                       set_class_constraint_i_j=
                                                       self.set_strong_monotonicity_constraint_i_j,
                                                       symmetry=True,
+                                                      set_sympy_expr=self.set_sympy_expr
                                                       )
+    def set_sympy_expr(self, x1, x2, g1, g2):
+        """
+        Return the sympy expression
+        """
+        sympy_expr = self.mu_sympy * (x1 - x2) ** 2 - (g1 - g2) * (x1 - x2)
+        return sympy_expr

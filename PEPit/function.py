@@ -8,6 +8,9 @@ from PEPit.psd_matrix import PSDMatrix
 
 from PEPit.tools.dict_operations import merge_dict, prune_dict
 
+import sympy
+from sympy import symbols
+
 
 class Function(object):
     """
@@ -127,6 +130,7 @@ class Function(object):
         self.list_of_constraints = list()
         self.list_of_psd = list()
         self.list_of_class_constraints = list()
+        self.list_of_sympy_expr = dict()
         self.list_of_class_psd = list()
 
         # Initialize dictionary that will contain the tables of constraints
@@ -344,6 +348,7 @@ class Function(object):
         # Browse list of points and create interpolation constraints
         for i, point_i in enumerate(list_of_points):
 
+
             xi, gi, fi = point_i
             xi_id = xi.get_name()
             if xi_id is None:
@@ -374,7 +379,8 @@ class Function(object):
 
     def add_constraints_from_two_lists_of_points(self, list_of_points_1, list_of_points_2,
                                                  constraint_name, set_class_constraint_i_j,
-                                                 symmetry=False):
+                                                 symmetry=False,
+                                                 set_sympy_expr=None):
         """
         Add a class constraint of two inputs on all the couple of points of
         `list_of_points_1` :math:`\\times` `list_of_points_2`.
@@ -405,6 +411,8 @@ class Function(object):
 
             xi, gi, fi = point_i
             xi_id = xi.get_name()
+            xi_sympy, gj_sympy = symbols("%s g%s" % (xi_id, xi_id), real=True)
+
             if xi_id is None:
                 xi_id = "Point_{}".format(i)
 
@@ -415,6 +423,9 @@ class Function(object):
 
                 xj, gj, fj = point_j
                 xj_id = xj.get_name()
+
+                xj_sympy, gi_sympy = symbols("%s g%s" % (xj_id, xj_id), real=True)
+
                 if xj_id is None:
                     xj_id = "Point_{}".format(j)
 
@@ -428,8 +439,14 @@ class Function(object):
                                                           )
 
                     # Set name to newly created constraint
-                    constraint.set_name("IC_{}_{}({}, {})".format(function_id, constraint_name, xi_id, xj_id))
+                    name = "IC_{}_{}({}, {})".format(
+                            function_id, constraint_name, xi_id, xj_id)
+                    constraint.set_name(name=name)
 
+                    # import ipdb; ipdb.set_trace()
+
+                    # self.list_of_sympy_expr[name] = set_sympy_expr(
+                    #     xi_sympy, xj_sympy, gi_sympy, gj_sympy)
                     # Add constraint to the row of constraints
                     row_of_constraints.append(constraint)
 
@@ -508,6 +525,7 @@ class Function(object):
 
         """
         self.list_of_class_constraints = list()
+        # import ipdb; ipdb.set_trace()
         self.add_class_constraints()
 
     def add_class_constraints(self):
