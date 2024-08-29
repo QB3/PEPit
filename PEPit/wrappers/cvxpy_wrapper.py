@@ -16,7 +16,7 @@ class CvxpyWrapper(Wrapper):
     This class overwrites the :class:`Wrapper` for CVXPY. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
     get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
-    
+
     Attributes:
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
                                                     associated to the PEP. This list does not contain constraints
@@ -45,8 +45,8 @@ class CvxpyWrapper(Wrapper):
 
     def __init__(self, verbose=1):
         """
-        This function initialize all internal variables of the class. 
-        
+        This function initialize all internal variables of the class.
+
         Args:
             verbose (int): Level of information details to print
                            (Override the solver verbose parameter).
@@ -98,7 +98,7 @@ class CvxpyWrapper(Wrapper):
 
         """
         import cvxpy as cp
-        
+
         Gweights, Fweights, cons = expression_to_matrices(expression)
         cvxpy_variable = cons + self.F @ Fweights + cp.sum(cp.multiply(self.G, Gweights))
 
@@ -151,7 +151,7 @@ class CvxpyWrapper(Wrapper):
 
         """
         import cvxpy as cp
-        
+
         # Sanity check
         assert isinstance(psd_matrix, PSDMatrix)
 
@@ -235,13 +235,13 @@ class CvxpyWrapper(Wrapper):
 
         Args:
             objective (Expression): the objective function of the PEP (to be maximized).
-        
+
         Returns:
             prob (cvxpy.Problem): the PEP in cvxpy format.
 
         """
         import cvxpy as cp
-        
+
         cvxpy_objective = self._expression_to_solver(objective)
         self.objective = cvxpy_objective
         self.prob = cp.Problem(objective=cp.Maximize(cvxpy_objective), constraints=self._list_of_solver_constraints)
@@ -253,13 +253,13 @@ class CvxpyWrapper(Wrapper):
 
         Args:
             kwargs (keywords, optional): solver specific arguments.
-        
+
         Returns:
             status (string): status of the solution / problem.
             name (string): name of the solver.
             value (float): value of the performance metric after solving.
             problem (cvxpy Problem): solver-specific model of the PEP.
-        
+
         """
         if self.verbose > 1:
             kwargs['verbose'] = True
@@ -311,7 +311,7 @@ class CvxpyWrapper(Wrapper):
 
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
-        Add the constraint that the objective stay close to its actual value before using 
+        Add the constraint that the objective stay close to its actual value before using
         dimension-reduction heuristics. That is, we constrain
 
         .. math:: \\tau \\leqslant \\text{wc value} + \\text{tol dimension reduction}
@@ -320,7 +320,7 @@ class CvxpyWrapper(Wrapper):
             wc_value (float): the optimal value of the original PEP.
             tol_dimension_reduction (float): tolerance on the objective for finding
                                              low-dimensional examples.
-        
+
         """
         # Add the constraint that the objective stay close to its actual value
         self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
@@ -332,7 +332,7 @@ class CvxpyWrapper(Wrapper):
 
         Args:
             weight (np.array): weights that will be used in the heuristic.
-        
+
         """
         import cvxpy as cp
 
