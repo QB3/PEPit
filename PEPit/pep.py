@@ -482,7 +482,7 @@ class PEP(object):
             # TODO change to take potential multiple functions into account
             if custom_constraints is not None:
                 # if custom_constraints[idx_function] is not None:
-                function.list_of_class_constraints = custom_constraints[idx_function]
+                function.list_of_class_constraints = [custom_constraints[idx_function]]
             # else:
             #  =
             for constraint in function.list_of_class_constraints:
