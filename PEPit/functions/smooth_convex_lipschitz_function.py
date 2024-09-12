@@ -64,7 +64,7 @@ class SmoothConvexLipschitzFunction(Function):
         # Store L and M
         self.L = L
         self.M = M
-
+        self.set_name("SmoothConvexLipschitzFunction")
         if self.L == np.inf:
             print("\033[96m(PEPit) Smooth convex Lipschitz continuous functions are necessarily differentiable.\n"
                   "To instantiate a convex Lipschitz continuous function, please avoid using the class\n"

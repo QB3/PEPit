@@ -65,7 +65,7 @@ class LinearOperator(Function):
 
         # Store L
         self.L = L
-
+        self.set_name("LinearOperator")
         # Define an adjunct operator with no class constraint
         # Its list of points is what is important
         self.T = Function(is_leaf=True)

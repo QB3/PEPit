@@ -74,6 +74,7 @@ class LipschitzStronglyMonotoneOperator(Function):
         # Store L and mu
         self.mu = mu
         self.L = L
+        self.set_name("LipschitzStronglyMonotoneOperator")
         self.mu_sympy = symbols("mu", positive=True)
         self.L_sympy = symbols("L", positive=True)
 

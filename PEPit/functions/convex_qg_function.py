@@ -55,6 +55,7 @@ class ConvexQGFunction(Function):
 
         # Store L
         self.L = L
+        self.set_name("ConvexQGFunction")
 
     @staticmethod
     def set_convexity_constraint_i_j(xi, gi, fi,

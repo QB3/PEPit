@@ -60,6 +60,7 @@ class NegativelyComonotoneOperator(Function):
 
         # Store the beta parameter
         self.rho = rho
+        self.set_name("NegativelyComonotoneOperator")
 
         if self.rho < 0:
             print("\033[96m(PEPit) The parameters rho is expected to be positive.\033[0m")

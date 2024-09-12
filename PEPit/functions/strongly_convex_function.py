@@ -56,6 +56,7 @@ class StronglyConvexFunction(Function):
 
         # Store mu
         self.mu = mu
+        self.set_name("StronglyConvexFunction")
 
     def set_strong_convexity_constraint_i_j(self,
                                             xi, gi, fi,

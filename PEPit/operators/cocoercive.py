@@ -60,7 +60,7 @@ class CocoerciveOperator(Function):
 
         # Store the beta parameter
         self.beta = beta
-
+        self.set_name("CocoerciveOperator")
         if self.beta == 0:
             print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
                   "To instantiate a monotone operator, please avoid using the class CocoerciveOperator\n"

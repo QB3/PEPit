@@ -56,6 +56,7 @@ class ConvexIndicatorFunction(Function):
 
         # Store the diameter D in an attribute
         self.D = D
+        self.set_name("ConvexIndicatorFunction")
 
     @staticmethod
     def set_value_constraint_i(xi, gi, fi):

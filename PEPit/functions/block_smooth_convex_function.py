@@ -75,6 +75,7 @@ class BlockSmoothConvexFunction(Function):
 
         self.partition = partition
         self.L = L
+        self.set_name("BlockSmoothConvexFunction")
 
     def add_class_constraints(self):
         """

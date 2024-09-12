@@ -56,6 +56,7 @@ class ConvexSupportFunction(Function):
 
         # Store the Lipschitz constant in an attribute
         self.M = M
+        self.set_name("ConvexSupportFunction")
 
     @staticmethod
     def set_fenchel_value_constraint_i(xi, gi, fi):

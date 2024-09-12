@@ -341,6 +341,7 @@ class Function(object):
         function_id = self.get_name()
         if function_id is None:
             function_id = "Function_{}".format(self.counter)
+            self.set_name(function_id)
 
         # Initialize table of constraints
         table_of_constraints = list()
@@ -411,7 +412,8 @@ class Function(object):
 
             xi, gi, fi = point_i
             xi_id = xi.get_name()
-            xi_sympy, gj_sympy = symbols("%s g%s" % (xi_id, xi_id), real=True)
+
+            xi_sympy, gi_sympy, fi_sympy = symbols("%s g%s f%s" % (xi_id, xi_id, xi_id), real=True)
 
             if xi_id is None:
                 xi_id = "Point_{}".format(i)
@@ -424,7 +426,7 @@ class Function(object):
                 xj, gj, fj = point_j
                 xj_id = xj.get_name()
 
-                xj_sympy, gi_sympy = symbols("%s g%s" % (xj_id, xj_id), real=True)
+                xj_sympy, gj_sympy, fj_sympy = symbols("%s g%s f%s" % (xj_id, xj_id, xj_id), real=True)
 
                 if xj_id is None:
                     xj_id = "Point_{}".format(j)

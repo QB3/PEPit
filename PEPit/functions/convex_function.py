@@ -40,6 +40,7 @@ class ConvexFunction(Function):
                          reuse_gradient=reuse_gradient,
                          name=name,
                          )
+        self.set_name("ConvexFunction")
 
     @staticmethod
     def set_convexity_constraint_i_j(xi, gi, fi,

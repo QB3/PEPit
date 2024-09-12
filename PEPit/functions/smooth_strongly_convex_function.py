@@ -1,6 +1,9 @@
 import numpy as np
 from PEPit.function import Function
 
+import sympy
+from sympy import symbols
+
 
 class SmoothStronglyConvexFunction(Function):
     """
@@ -63,6 +66,9 @@ class SmoothStronglyConvexFunction(Function):
         # Store mu and L
         self.mu = mu
         self.L = L
+        self.mu_sympy = symbols("mu", positive=True)
+        self.L_sympy = symbols("L", positive=True)
+        self.set_name("SmoothStronglyConvexFunction")
 
         if self.L == np.inf:
             print("\033[96m(PEPit) Smooth strongly convex functions are necessarily differentiable. To instantiate\n"
@@ -86,6 +92,16 @@ class SmoothStronglyConvexFunction(Function):
 
         return constraint
 
+    def set_sympy_expr_smoothness_strong_convexity(self, xi, xj, gi, gj, fi, fj):
+        """
+        Return the sympy expression
+        """
+        sympy_expr = (fi - fj >= gj * (xi - xj)
+                       + 1 / (2 * self.L_sympy) * (gi - gj)**2
+                       + self.mu_sympy / (2 * (1 - self.mu_sympy / self.L_sympy)) * (
+                           xi - xj - 1 / self.L_sympy * (gi - gj)) ** 2)
+        return sympy_expr
+
     def add_class_constraints(self):
         """
         Add class constraints.
@@ -95,4 +111,6 @@ class SmoothStronglyConvexFunction(Function):
                                                       constraint_name="smoothness_strong_convexity",
                                                       set_class_constraint_i_j=
                                                       self.set_smoothness_strong_convexity_constraint_i_j,
+                                                      symmetry=True,
+                                                      set_sympy_expr=self.set_sympy_expr_smoothness_strong_convexity
                                                       )

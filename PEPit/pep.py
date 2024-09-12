@@ -469,9 +469,8 @@ class PEP(object):
             print('(PEPit) Setting up the problem:'
                   ' interpolation conditions for {} function(s)'.format(len(self.list_of_leaf_functions)))
         function_counter = 0
-        for idx_function, function in enumerate(self.list_of_leaf_functions):
+        for function in self.list_of_leaf_functions:
             function_counter += 1
-
             if verbose:
                 print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
                       'scalar constraint(s) ...')
@@ -482,7 +481,8 @@ class PEP(object):
             # TODO change to take potential multiple functions into account
             if custom_constraints is not None:
                 # if custom_constraints[idx_function] is not None:
-                function.list_of_class_constraints = [custom_constraints[idx_function]]
+
+                function.list_of_class_constraints = custom_constraints[function.get_name()]
             # else:
             #  =
             for constraint in function.list_of_class_constraints:

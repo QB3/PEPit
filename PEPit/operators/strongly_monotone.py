@@ -61,6 +61,7 @@ class StronglyMonotoneOperator(Function):
                          )
         # Store mu
         self.mu = mu
+        self.set_name("StronglyMonotoneOperator")
         mu_sympy = symbols("mu", positive=True)
 
 

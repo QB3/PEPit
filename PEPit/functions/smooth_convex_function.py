@@ -58,7 +58,7 @@ class SmoothConvexFunction(Function):
 
         # Store L
         self.L = L
-
+        self.set_name("SmoothConvexFunction")
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of smooth convex functions is necessarily differentiable.\n"
                   "To instantiate a convex function, please avoid using the class SmoothConvexFunction with \n"

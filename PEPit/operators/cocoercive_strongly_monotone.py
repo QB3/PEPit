@@ -69,7 +69,7 @@ class CocoerciveStronglyMonotoneOperator(Function):
         # Store the mu and beta parameters
         self.mu = mu
         self.beta = beta
-
+        self.set_name("CocoerciveStronglyMonotoneOperator")
         if self.mu == 0:
             print("\033[96m(PEPit) The class of cocoercive and strongly monotone operators is necessarily continuous."
                   " \n"

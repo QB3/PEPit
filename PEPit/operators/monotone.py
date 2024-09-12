@@ -46,6 +46,7 @@ class MonotoneOperator(Function):
                          reuse_gradient=reuse_gradient,
                          name=name,
                          )
+        self.set_name("MonotoneOperator")
 
     @staticmethod
     def set_monotonicity_constraint_i_j(xi, gi, fi,

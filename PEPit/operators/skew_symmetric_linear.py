@@ -65,6 +65,7 @@ class SkewSymmetricLinearOperator(Function):
 
         # Store L
         self.L = L
+        self.set_name("SkewSymmetricLinearOperator")
 
     @staticmethod
     def set_antisymmetric_linear_constraint_i_j(xi, gi, fi,

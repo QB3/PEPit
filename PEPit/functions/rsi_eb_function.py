@@ -61,6 +61,7 @@ class RsiEbFunction(Function):
         # Store mu and L
         self.mu = mu
         self.L = L
+        self.set_name("RsiEbFunction")
 
     def set_rsi_constraints_i_j(self,
                                 xi, gi, fi,

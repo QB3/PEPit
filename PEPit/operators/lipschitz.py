@@ -78,7 +78,7 @@ class LipschitzOperator(Function):
                          )
         # Store L
         self.L = L
-
+        self.set_name("LipschitzOperator")
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of L-Lipschitz operators with L == np.inf implies no constraint: \n"
                   "it contains all multi-valued mappings. This might imply issues in your code.\033[0m")

@@ -56,6 +56,7 @@ class ConvexLipschitzFunction(Function):
 
         # param M
         self.M = M
+        self.set_name("ConvexLipschitzFunction")
 
     def set_lipschitz_continuity_constraint_i(self,
                                               xi, gi, fi):

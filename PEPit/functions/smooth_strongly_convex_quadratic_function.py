@@ -66,6 +66,7 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         # Store mu and L
         self.mu = mu
         self.L = L
+        self.set_name("SmoothStronglyConvexQuadraticFunction")
 
     def set_value_constraint_i(self,
                                xi, gi, fi):

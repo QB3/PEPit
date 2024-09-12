@@ -70,6 +70,7 @@ class SymmetricLinearOperator(Function):
         # Store L and mu
         self.mu = mu
         self.L = L
+        self.set_name("SymmetricLinearOperator")
 
     @staticmethod
     def set_symmetric_linear_constraint_i_j(xi, gi, fi,

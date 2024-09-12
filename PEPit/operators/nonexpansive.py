@@ -74,6 +74,7 @@ class NonexpansiveOperator(Function):
 
         # Store the infimal displacement vector v to None by default.
         self.v = None
+        self.set_name("NonexpansiveOperator")
 
     @staticmethod
     def set_nonexpansiveness_constraint_i_j(xi, gi, fi,
