@@ -1,4 +1,5 @@
 from .block_smooth_convex_function import BlockSmoothConvexFunction
+from .block_convex_concave_function import BlockConvexConcaveFunction
 from .convex_function import ConvexFunction
 from .convex_indicator import ConvexIndicatorFunction
 from .convex_lipschitz_function import ConvexLipschitzFunction
@@ -13,6 +14,7 @@ from .smooth_strongly_convex_quadratic_function import SmoothStronglyConvexQuadr
 from .strongly_convex_function import StronglyConvexFunction
 
 __all__ = ['block_smooth_convex_function', 'BlockSmoothConvexFunction',
+           'block_convex_concave_function', 'BlockConvexConcaveFunction',
            'convex_function', 'ConvexFunction',
            'convex_indicator', 'ConvexIndicatorFunction',
            'convex_lipschitz_function', 'ConvexLipschitzFunction',
