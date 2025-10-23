@@ -116,13 +116,10 @@ def wc_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1):
       
 
          # Compute x from the docstring equation.
-         x = block_partition.get_block(z, 0)
-         y = block_partition.get_block(z, 1)
          gz = Point()
          fz = Expression()
-         x = x - gamma * block_partition.get_block(gz, 0)
-         y = y + gamma * block_partition.get_block(gz, 1)
-         z = x+y
+         z = z - gamma * block_partition.get_block(gz, 0)
+         z = z + gamma * block_partition.get_block(gz, 1)
          z_avg += z
          count+=1
          # Add point to Function f.
@@ -143,8 +140,8 @@ def wc_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of proximal point method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t f(z_avg)-f_* <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(z_avg)-f_* <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
